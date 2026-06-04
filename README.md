@@ -32,10 +32,70 @@ Each user has their own private data: depots, jobs, vehicles, and saved routes.
 ## Tech stack
 
 - Python 3.13
-- Django 5.x
+- Django 6.x + Django REST Framework
 - PostgreSQL
-- Leaflet + OpenStreetMap (maps & geocoding)
-- Frontend: Django templates (React planned)
+- JWT Authentication (djangorestframework-simplejwt)
+- OpenStreetMap / Nominatim (geocoding)
+- Frontend: React (separate repository — `geo-planner/FrontEnd`)
+
+## API Endpoints
+
+### Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/token/` | Login — returns access + refresh JWT |
+| POST | `/api/token/refresh/` | Refresh access token |
+| POST | `/api/register/` | Register new user |
+
+### Depots
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/depots/` | List user's depots |
+| POST | `/api/depots/` | Create depot |
+| GET | `/api/depots/{id}/` | Depot detail |
+| PUT/PATCH | `/api/depots/{id}/` | Update depot |
+| DELETE | `/api/depots/{id}/` | Delete depot |
+
+### Jobs
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/jobs/` | List user's jobs |
+| POST | `/api/jobs/` | Create job |
+| GET | `/api/jobs/{id}/` | Job detail |
+| PUT/PATCH | `/api/jobs/{id}/` | Update job |
+| DELETE | `/api/jobs/{id}/` | Delete job |
+
+### Vehicles
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/vehicles/` | List user's vehicles |
+| POST | `/api/vehicles/` | Create vehicle |
+| GET | `/api/vehicles/{id}/` | Vehicle detail |
+| PUT/PATCH | `/api/vehicles/{id}/` | Update vehicle |
+| DELETE | `/api/vehicles/{id}/` | Delete vehicle |
+
+### Routes
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/routes/` | List user's routes |
+| POST | `/api/routes/` | Create route (select depot + jobs) |
+| GET | `/api/routes/{id}/` | Route detail |
+| PATCH | `/api/routes/{id}/` | Update route (e.g. change status) |
+| DELETE | `/api/routes/{id}/` | Delete route |
+| GET | `/api/routes/{id}/stops/` | Ordered stops for a route |
+| POST | `/api/routes/{id}/solve/` | Trigger TSP/VRP algorithm, saves RouteStops |
+
+### Geocoding
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/geocode/` | Batch geocode list of addresses, returns lat/lon |
+
+### Dictionaries (read-only)
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/route-types/` | List route types (TSP, VRP) |
+| GET | `/api/vehicle-types/` | List vehicle types |
+| GET | `/api/route-statuses/` | List route statuses |
 
 ## Setup
 
@@ -73,10 +133,10 @@ BackEnd/
 ├── BackEnd/          # Project configuration (settings, urls)
 ├── geoplanner/       # Main application
 │   ├── models.py     # Database models
-│   ├── views.py      # Views
+│   ├── serializers.py# DRF serializers
+│   ├── views.py      # API ViewSets
 │   ├── urls.py       # URL routing
-│   ├── admin.py      # Admin panel configuration
-│   └── templates/    # HTML templates
+│   └── admin.py      # Admin panel configuration
 ├── docs/
 │   └── DB_Model.jpg  # Database diagram
 ├── requirements.txt
