@@ -35,7 +35,9 @@ Each user has their own private data: depots, jobs, vehicles, and saved routes.
 - Django 6.x + Django REST Framework
 - PostgreSQL
 - JWT Authentication (djangorestframework-simplejwt)
+- CORS (django-cors-headers)
 - OpenStreetMap / Nominatim (geocoding)
+- Google OR-Tools (TSP/VRP solver) + Haversine distance
 - Frontend: React (separate repository — `geo-planner/FrontEnd`)
 
 ## API Endpoints
@@ -132,11 +134,12 @@ python manage.py runserver
 BackEnd/
 ├── BackEnd/          # Project configuration (settings, urls)
 ├── geoplanner/       # Main application
-│   ├── models.py     # Database models
-│   ├── serializers.py# DRF serializers
-│   ├── views.py      # API ViewSets
-│   ├── urls.py       # URL routing
-│   └── admin.py      # Admin panel configuration
+│   ├── models.py      # Database models
+│   ├── serializers.py # DRF serializers
+│   ├── views.py       # API ViewSets + custom actions
+│   ├── urls.py        # URL routing (DefaultRouter)
+│   ├── algorithms.py  # TSP/VRP solver (OR-Tools + Haversine)
+│   └── admin.py       # Admin panel configuration
 ├── docs/
 │   └── DB_Model.jpg  # Database diagram
 ├── requirements.txt
