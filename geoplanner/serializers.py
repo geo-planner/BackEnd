@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Depot, Job, Vehicle, RouteType, VehicleType, RouteStatus
+from .models import Depot, Job, Vehicle, RouteType, VehicleType, RouteStatus, Route, RouteStop
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -75,3 +75,31 @@ class VehicleSerializer(serializers.ModelSerializer):
         model = Vehicle
         fields = ['id', 'user', 'vehicle_type', 'vehicle_type_name', 'name',
                   'capacity', 'starting_time', 'working_time_minutes']
+
+
+class RouteStopSerializer(serializers.ModelSerializer):
+    # pokazujemy adres joba zamiast tylko jego ID — czytelniejszy wynik
+    job_address = serializers.CharField(source='job.address', read_only=True)
+    job_code = serializers.CharField(source='job.job_code', read_only=True)
+    job_latitude = serializers.FloatField(source='job.latitude', read_only=True)
+    job_longitude = serializers.FloatField(source='job.longitude', read_only=True)
+    vehicle_name = serializers.CharField(source='vehicle.name', read_only=True, default=None)
+
+    class Meta:
+        model = RouteStop
+        fields = ['id', 'sequence', 'job', 'job_code', 'job_address',
+                  'job_latitude', 'job_longitude', 'vehicle', 'vehicle_name']
+
+
+class RouteSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    # zagniezdzone przystanki — read_only, tworzone przez endpoint /solve/
+    stops = RouteStopSerializer(many=True, read_only=True, source='routestop_set')
+    route_type_name = serializers.CharField(source='route_type.name', read_only=True)
+    route_status_name = serializers.CharField(source='route_status.name', read_only=True)
+
+    class Meta:
+        model = Route
+        fields = ['id', 'user', 'name', 'depot', 'route_type', 'route_type_name',
+                  'route_status', 'route_status_name', 'total_distance_km',
+                  'created_at', 'stops']

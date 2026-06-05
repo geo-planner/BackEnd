@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (RegisterView, GeocodeView, DepotViewSet, JobViewSet,
                     VehicleViewSet, RouteTypeViewSet, VehicleTypeViewSet,
-                    RouteStatusViewSet)
+                    RouteStatusViewSet, RouteViewSet)
 
 router = DefaultRouter()
 # slowniki - read only
@@ -13,6 +13,7 @@ router.register(r'route-statuses', RouteStatusViewSet, basename='routestatus')
 router.register(r'depots', DepotViewSet, basename='depot')
 router.register(r'jobs', JobViewSet, basename='job')
 router.register(r'vehicles', VehicleViewSet, basename='vehicle')
+router.register(r'routes', RouteViewSet, basename='route')
 
 urlpatterns = [
     path('', include(router.urls)),
