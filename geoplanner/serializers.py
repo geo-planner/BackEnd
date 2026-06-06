@@ -54,7 +54,7 @@ class DepotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Depot
-        fields = ['id', 'user', 'name', 'address', 'latitude', 'longitude', 'created_at']
+        fields = ['id', 'user', 'name', 'address', 'latitude', 'longitude', 'is_active', 'created_at']
 
 
 class JobSerializer(serializers.ModelSerializer):
@@ -63,7 +63,7 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'user', 'address', 'job_code', 'latitude', 'longitude',
-                  'service_time_minutes', 'demand', 'created_at']
+                  'service_time_minutes', 'demand', 'is_active', 'created_at']
 
 
 class VehicleSerializer(serializers.ModelSerializer):

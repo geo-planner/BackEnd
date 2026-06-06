@@ -26,6 +26,7 @@ class Depot(models.Model):
     address = models.CharField(max_length=255)
     latitude = models.FloatField()
     longitude = models.FloatField()
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -34,11 +35,12 @@ class Depot(models.Model):
 class Job(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=255)
-    job_code = models.CharField(max_length=50, null=True, blank=True)                 
+    job_code = models.CharField(max_length=50, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     service_time_minutes = models.IntegerField(null=True, blank=True)
     demand = models.IntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

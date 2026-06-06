@@ -79,11 +79,13 @@ class DepotViewSet(viewsets.ModelViewSet):
     serializer_class = DepotSerializer
 
     def get_queryset(self):
-        # zwracamy tylko depotyy nalezace do zalogowanego uzytkownika
-        return Depot.objects.filter(user=self.request.user)
+        qs = Depot.objects.filter(user=self.request.user)
+        # filtrujemy is_active tylko dla listy; operacje na konkretnym obiekcie widza wszystko
+        if self.action == 'list' and not self.request.query_params.get('include_archived'):
+            qs = qs.filter(is_active=True)
+        return qs
 
     def perform_create(self, serializer):
-        # przy tworzeniu automatycznie przypisujemy zalogowanego uzytkownika
         serializer.save(user=self.request.user)
 
 
@@ -91,7 +93,10 @@ class JobViewSet(viewsets.ModelViewSet):
     serializer_class = JobSerializer
 
     def get_queryset(self):
-        return Job.objects.filter(user=self.request.user)
+        qs = Job.objects.filter(user=self.request.user)
+        if self.action == 'list' and not self.request.query_params.get('include_archived'):
+            qs = qs.filter(is_active=True)
+        return qs
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
