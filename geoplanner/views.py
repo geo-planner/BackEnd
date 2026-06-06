@@ -9,7 +9,7 @@ from .serializers import (RegisterSerializer, DepotSerializer, JobSerializer,
                           VehicleSerializer, RouteTypeSerializer, RouteSerializer,
                           VehicleTypeSerializer, RouteStatusSerializer)
 from .models import Depot, Job, Vehicle, RouteType, VehicleType, RouteStatus, Route, RouteStop
-from .algorithms import solve_tsp
+from .algorithms import solve_tsp, haversine_distance
 
 
 class RegisterView(generics.CreateAPIView):
@@ -166,6 +166,15 @@ class RouteViewSet(viewsets.ModelViewSet):
                 job_id=job_point['id'],
                 sequence=sequence,
             )
+
+        # liczymy total_distance_km: depot → stop1 → ... → stopN → depot (Haversine)
+        all_points = [depot_point] + ordered_jobs + [depot_point]
+        total_meters = sum(
+            haversine_distance(all_points[i], all_points[i + 1])
+            for i in range(len(all_points) - 1)
+        )
+        route.total_distance_km = round(total_meters / 1000, 2)
+        route.save()
 
         # zwracamy zaktualizowana trase z przystankami
         serializer = self.get_serializer(route)

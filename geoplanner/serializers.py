@@ -93,13 +93,14 @@ class RouteStopSerializer(serializers.ModelSerializer):
 
 class RouteSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)
-    # zagniezdzone przystanki — read_only, tworzone przez endpoint /solve/
     stops = RouteStopSerializer(many=True, read_only=True, source='routestop_set')
     route_type_name = serializers.CharField(source='route_type.name', read_only=True)
     route_status_name = serializers.CharField(source='route_status.name', read_only=True)
+    depot_name = serializers.CharField(source='depot.name', read_only=True)
+    depot_address = serializers.CharField(source='depot.address', read_only=True)
 
     class Meta:
         model = Route
-        fields = ['id', 'user', 'name', 'depot', 'route_type', 'route_type_name',
-                  'route_status', 'route_status_name', 'total_distance_km',
-                  'created_at', 'stops']
+        fields = ['id', 'user', 'name', 'depot', 'depot_name', 'depot_address',
+                  'route_type', 'route_type_name', 'route_status', 'route_status_name',
+                  'total_distance_km', 'created_at', 'stops']
