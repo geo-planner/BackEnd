@@ -53,6 +53,7 @@ class Vehicle(models.Model):
     capacity = models.IntegerField()
     starting_time = models.TimeField()
     working_time_minutes = models.IntegerField()
+    photo = models.ImageField(upload_to='vehicles/', null=True, blank=True)
 
     def __str__(self):
         return self.name

@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from .models import RouteType, VehicleType, RouteStatus, Depot, Job, Vehicle, Route, RouteStop
 
 
@@ -39,7 +40,15 @@ class JobAdmin(admin.ModelAdmin):
 
 
 # Vehicle
-admin.site.register(Vehicle)
+@admin.register(Vehicle)
+class VehicleAdmin(admin.ModelAdmin):
+    list_display = ['name', 'user', 'vehicle_type', 'capacity', 'starting_time', 'photo_preview']
+
+    def photo_preview(self, obj):
+        if obj.photo:
+            return format_html('<img src="{}" height="40"/>', obj.photo.url)
+        return '—'
+    photo_preview.short_description = 'Photo'
 
 
 # RouteStop inline (używany wewnątrz Route)
