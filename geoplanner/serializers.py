@@ -74,7 +74,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = ['id', 'user', 'vehicle_type', 'vehicle_type_name', 'name',
-                  'capacity', 'starting_time', 'working_time_minutes']
+                  'capacity', 'starting_time', 'working_time_minutes', 'photo']
 
 
 class RouteStopSerializer(serializers.ModelSerializer):
